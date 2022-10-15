@@ -38,7 +38,7 @@ public class Books {
 
             int count = 0;
 
-            while (result.next()){
+            while (result.next()) {
                 String bookname = result.getString("BookName");
                 String authorname = result.getString("AuthorName");
                 double price = result.getDouble("Price");
@@ -49,14 +49,13 @@ public class Books {
                 System.out.println(String.format(output, ++count, bookname, authorname, price, edition));
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
     }
 
-    public void deleteBook(){
+    public void deleteBook() {
         System.out.println("enter Book Name to Delete");
         String book = sc.nextLine();
         String dbURL = "jdbc:mysql://localhost:3306/Java";
@@ -77,19 +76,20 @@ public class Books {
             if (rowsDeleted > 0) {
                 System.out.println("A user was deleted successfully!");
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
     }
 
-    public void updateBook(){
+    public void updateBook() {
 //        viewBooks();
         System.out.println("chose any of one book to update");
         String dbURL = "jdbc:mysql://localhost:3306/Java";
         String username = "root";
         String password = "";
+
+        viewBooks();
 
         System.out.println("enter BookName To update");
         String book = sc.nextLine();
@@ -100,33 +100,24 @@ public class Books {
         System.out.println("enter book price to update");
         double price = sc.nextDouble();
 
-        try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
 
-            if (conn != null) {
-                System.out.println("connected to Database");
-            }
+            try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
 
-            String sql = "UPDATE books SET   AuthorName=?, Price=? , Edition=? WHERE BookName=?";
 
-            assert conn != null;
-            PreparedStatement statement = conn.prepareStatement(sql);
-//            statement.setString(1,author);
-//            statement.setDouble(2,price);
-//            statement.setInt(3,edition);
-//            statement.setString(4,book);
 
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
+                String query2 = "UPDATE books SET BookName= '" + book + "', AuthorName= '" + author + "', Edition ='" + edition + "',Price='" + price +"' WHERE BookName = '"+book+"'";
+
+                PreparedStatement prestatement = conn.prepareStatement(query2);
+                prestatement.execute();
                 System.out.println("An existing user was updated successfully!");
-            }
 
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+
+            }
+            catch (Exception e1) {
+                e1.printStackTrace();
+            }
 
         }
     }
-}
-
 
 
